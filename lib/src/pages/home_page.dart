@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:laynesmovies/src/providers/peliculas_provider.dart';
+import 'package:laynesmovies/src/search/search_delegate.dart';
 import 'package:laynesmovies/src/widgets/card_swiper_widget.dart';
 import 'package:laynesmovies/src/widgets/movie_horizontal.dart';
 
@@ -7,11 +8,14 @@ class HomePage extends StatelessWidget {
   final peliculasProvider = new PeliculasProvider();
   @override
   Widget build(BuildContext context) {
+    peliculasProvider.getPopulares();
     return Scaffold(
         appBar: AppBar(
             title: Text('Películas en cines'),
             backgroundColor: Colors.indigoAccent,
-            actions: [IconButton(icon: Icon(Icons.search), onPressed: () {})]),
+            actions: [IconButton(icon: Icon(Icons.search), onPressed: () {
+              showSearch(context: context, delegate: DataSearch());
+            })]),
         body: Container(
           child: Column(
            mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -51,11 +55,12 @@ class HomePage extends StatelessWidget {
           ),
         ),
         SizedBox(height: 5.0),
-        FutureBuilder(
-            future: peliculasProvider.getPopulares(),
+        StreamBuilder(
+            stream: peliculasProvider.popularesStream,
             builder: (BuildContext context, AsyncSnapshot<List> snapshot) {
               if (snapshot.hasData) {
-                return MovieHorizontal(peliculas: snapshot.data);
+                return MovieHorizontal(peliculas: snapshot.data,
+                siguientePagina: peliculasProvider.getPopulares);
               } else {
                 return Center(child: CircularProgressIndicator());
               }

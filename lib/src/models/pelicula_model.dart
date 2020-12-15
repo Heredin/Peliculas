@@ -12,6 +12,7 @@ class Peliculas{
   }
 }
 class Pelicula {
+    String uniqueId;
   bool adult;
   String backdropPath;
   List<int> genreIds;
@@ -64,5 +65,11 @@ class Pelicula {
       return 'https://www.publicdomainpictures.net/pictures/280000/velka/not-found-image-15383864787lu.jpg';
     }else{
     return 'https://image.tmdb.org/t/p/w500/$posterPath';
+  }}
+   getBackgroundImg(){
+    if(posterPath==null){
+      return 'https://www.publicdomainpictures.net/pictures/280000/velka/not-found-image-15383864787lu.jpg';
+    }else{
+    return 'https://image.tmdb.org/t/p/w500/$backdropPath';
   }}
 }
